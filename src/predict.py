@@ -1,7 +1,7 @@
 import joblib
 import pandas as pd
-from config import MODEL_PATH
-from logger import get_logger
+from src.config import MODEL_PATH
+from src.logger import get_logger
 
 # Initialize logger
 logger = get_logger(__name__)

@@ -1,0 +1,17 @@
+{
+    "model_type": "tuned-xgb",
+    "best_params": {
+        "subsample": 0.8,
+        "n_estimators": 200,
+        "max_depth": 7,
+        "learning_rate": 0.1,
+        "gamma": 1,
+        "colsample_bytree": 1.0,
+        "eval_metric": "aucpr",
+        "use_label_encoder": false,
+        "n_jobs": -1,
+        "random_state": 42,
+        "scale_pos_weight": 578.7277353689567
+    },
+    "trained_at": "2025-09-24 15:01:51"
+}
