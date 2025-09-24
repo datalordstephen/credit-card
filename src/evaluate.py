@@ -13,6 +13,10 @@ from sklearn.metrics import (
 )
 from data import load_and_split
 from config import MODEL_PATH, METADATA_PATH, REPORTS_PATH, METRICS_PATH
+from logger import get_logger
+
+# Initialize logger
+logger = get_logger(__name__)
 
 def load_metadata(path=METADATA_PATH):
     """
@@ -38,18 +42,21 @@ def evaluate_model(model_path=MODEL_PATH):
     """
     # Reload split (ensures consistency) and model
     _, X_test, _, y_test, _ = load_and_split()
+    logger.info("Data loaded and split for evaluation.")
+
     model = joblib.load(model_path)
+    logger.info(f"Model loaded from {model_path}")
 
     # display model metadata
     metadata = load_metadata()
-    print(f"EVALUATING MODEL: {metadata['model_type']}")
-    print("TRAINED AT:", metadata.get("trained_at"))
+    logger.info(f"Evaluating model -> {metadata['model_type']} trained at {metadata['trained_at']}")
 
     # Predictions
     y_pred = model.predict(X_test)
     y_prob = model.predict_proba(X_test)[:, 1]
 
     # Compute metrics
+    logger.info("Computing evaluation metrics...")  
     roc_auc = roc_auc_score(y_test, y_prob)
     pr_auc = average_precision_score(y_test, y_prob)
     report = classification_report(y_test, y_pred, digits=4, output_dict=True)
@@ -70,13 +77,12 @@ def evaluate_model(model_path=MODEL_PATH):
     
     with open(METRICS_PATH, "w") as f:
         json.dump(metrics, f, indent=4)
-    print(f"✅ Metrics saved to {METRICS_PATH}")
+    logger.info(f"Metrics saved to {METRICS_PATH}")
 
     # ROC Curve
     RocCurveDisplay.from_predictions(y_test, y_prob)
     plt.plot([0, 1], [0, 1], color="navy", lw=2, linestyle="--")
     plt.title('ROC Curve')
-    plt.show()
     plt.savefig(f"{REPORTS_PATH}/roc_curve.png")
     plt.close()
     
@@ -96,7 +102,7 @@ def evaluate_model(model_path=MODEL_PATH):
     plt.savefig(f"{REPORTS_PATH}/confusion_matrix.png")
     plt.close()
 
-    print("✅ Evaluation complete. Plots saved to reports folder.")
+    logger.info("Evaluation complete. Plots saved to reports folder.")
 
 if __name__ == "__main__":
     evaluate_model()

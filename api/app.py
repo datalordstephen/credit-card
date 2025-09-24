@@ -5,8 +5,13 @@ import json
 import tempfile
 from src.predict import predict_single, predict_batch
 from src.config import MODEL_PATH, METADATA_PATH
+from src.logger import get_logger
+
+# Initialize logger
+logger = get_logger(__name__)
 
 # Load model
+logger.info("Loading model into API...")
 model = joblib.load(MODEL_PATH)
 
 # Load metadata
@@ -15,6 +20,7 @@ try:
         metadata = json.load(f)
 except FileNotFoundError:
     metadata = {"model_type": "unknown", "trained_at": None, "best_params": None}
+    logger.warning("Metadata file not found — using defaults.")
 
 app = FastAPI(title="Credit Card Fraud Detection API")
 
@@ -57,6 +63,7 @@ def home():
     """
     Root endpoint showing API status and current model metadata.
     """
+    logger.info("Root endpoint accessed.")
     return {
         "message": "Credit Card Fraud Detection API is running 🚀",
         "model_info": {

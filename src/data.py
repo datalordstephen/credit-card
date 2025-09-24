@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 import config as cfg
+import warnings
+warnings.filterwarnings("ignore")
 
 def load_data():
     """
@@ -47,6 +49,9 @@ def preprocess_data(df: pd.DataFrame):
     df["time_of_day"] = df["time_of_day"].map(
         {"Morning": 0, "Noon": 1, "Evening": 2, "Night": 3}
     )
+
+    # convert categorical to numerical for xgboost
+    df['time_of_day'] = df['time_of_day'].astype(int)
 
     # Drop raw Time
     df = df.drop(columns=["Time"])

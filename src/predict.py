@@ -1,6 +1,10 @@
 import joblib
 import pandas as pd
 from config import MODEL_PATH
+from logger import get_logger
+
+# Initialize logger
+logger = get_logger(__name__)
 
 def load_model(model_path=MODEL_PATH):
     """
@@ -26,10 +30,14 @@ def predict_single(input_data: dict, model_path=MODEL_PATH):
         dict : Fraud probability and predicted class.
     """
     model = load_model(model_path)
+    logger.info(f"Model loaded from {model_path}")
+
+    logger.debug(f"Predicting on single data point...")
     df = pd.DataFrame([input_data])
     prob = model.predict_proba(df)[:, 1][0]
     pred = int(prob >= 0.5)
 
+    logger.info(f"Prediction complete -> class: {pred}, prob: {prob:.4f}")
     return {"fraud_probability": float(prob), "fraud_prediction": pred}
 
 def predict_batch(file_path: str, model_path=MODEL_PATH):
@@ -43,15 +51,20 @@ def predict_batch(file_path: str, model_path=MODEL_PATH):
     Returns:
         pd.DataFrame : Dataframe with fraud predictions and probabilities.
     """
+    logger.info(f"Running batch predictions on file: {file_path}")
+
     model = load_model(model_path)
     df = pd.read_csv(file_path)
+    logger.info(f"Model loaded from {model_path}, data shape: {df.shape}")
 
     # Drop label if present
     features = df.drop(columns=["Class"], errors="ignore")
 
+    logger.info(f"Predicting on {features.shape[0]} rows...")
     probs = model.predict_proba(features)[:, 1]
     preds = (probs >= 0.5).astype(int)
 
+    logger.info("Batch prediction complete.")
     df["fraud_probability"] = probs
     df["fraud_prediction"] = preds
 
