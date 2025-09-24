@@ -1,4 +1,3 @@
-import pprint
 import requests
 import pandas as pd
 from src.config import TEST_DATA_PATH
