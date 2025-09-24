@@ -1,14 +1,14 @@
 # Data paths
-RAW_DATA_PATH = "../data/creditcard.csv"
-TEST_DATA_PATH = "../data/api_test.csv"
+RAW_DATA_PATH = "data/creditcard.csv"
+TEST_DATA_PATH = "data/api_test.csv"
 
 # Model paths
-MODEL_PATH = "../models/best_xgb_model.pkl"
-METADATA_PATH = "../models/model_metadata.json"
+MODEL_PATH = "models/best_xgb_model.pkl"
+METADATA_PATH = "models/model_metadata.json"
 
 # path for reports
-REPORTS_PATH = "../reports"
-METRICS_PATH = "../reports/metrics.json"
+REPORTS_PATH = "reports"
+METRICS_PATH = "reports/metrics.json"
 
 # Training settings
 RANDOM_STATE = 42
