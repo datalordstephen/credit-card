@@ -1,6 +1,6 @@
 import joblib
 import pandas as pd
-from src.config import MODEL_PATH
+from config import MODEL_PATH
 
 def load_model(model_path=MODEL_PATH):
     """

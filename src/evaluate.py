@@ -11,8 +11,8 @@ from sklearn.metrics import (
     confusion_matrix,
     ConfusionMatrixDisplay
 )
-from src.data import load_and_split
-from src.config import MODEL_PATH, METADATA_PATH, REPORTS_PATH, METRICS_PATH
+from data import load_and_split
+from config import MODEL_PATH, METADATA_PATH, REPORTS_PATH, METRICS_PATH
 
 def load_metadata(path=METADATA_PATH):
     """

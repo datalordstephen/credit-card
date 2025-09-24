@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-import src.config as cfg
+import config as cfg
 
 def load_data():
     """
@@ -70,7 +70,7 @@ def load_and_split(test_size: float = cfg.TEST_SIZE, api_holdout: int = cfg.API_
         y_test (pd.Series): Test labels.
         api_data (pd.DataFrame): Completely held-out rows for API testing.
     """
-    df = load_data(cfg.RAW_DATA_PATH)
+    df = load_data()
     df = preprocess_data(df)
 
     # Hold out API test data

@@ -2,8 +2,8 @@ import json
 from datetime import datetime
 import joblib
 from xgboost import XGBClassifier
-from src.data import load_and_split
-import src.config as cfg
+from data import load_and_split
+import config as cfg
 
 def save_metadata(model_type, best_params=None, path=cfg.METADATA_PATH):
     """
