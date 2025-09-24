@@ -8,3 +8,4 @@ scikit_learn==1.7.2
 xgboost==3.0.5
 python-multipart===0.0.2
 uvicorn[standard]
+pytest
