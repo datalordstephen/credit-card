@@ -109,7 +109,8 @@ uvicorn api.app:app --reload
 ```python
 import requests
 
-url = "http://127.0.0.1:8000/predict"
+# local url or hosted model
+url = "http://127.0.0.1:8000/predict" | "https://cc-fraud-service.onrender.com/predict"
 
 sample_txn = {
   "V1": -16.5265065691231, "V2": 8.58497179585822, "V3": -18.6498531851945,
@@ -135,7 +136,8 @@ print(response.json())
 ```python
 import requests
 
-url = "http://127.0.0.1:8000/predict-batch"
+# localhost or hostel model
+url = "http://127.0.0.1:8000/predict-batch" | "https://cc-fraud-service.onrender.com/predict-batch"
 files = {"file": open("data/api_test.csv", "rb")}
 
 response = requests.post(url, files=files)
