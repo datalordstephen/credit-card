@@ -4,8 +4,10 @@ matplotlib==3.10.6
 numpy==2.3.3
 pandas==2.3.2
 pydantic==2.11.9
-scikit_learn==1.7.2
+scikit-learn==1.7.2
 xgboost==3.0.5
-python-multipart===0.0.2
-uvicorn[standard]
+python-multipart==0.0.2
+six==1.16.0
+python-dateutil==2.9.0.post0
+uvicorn[standard]==0.30.6
 pytest
