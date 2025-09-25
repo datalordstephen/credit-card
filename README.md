@@ -146,7 +146,7 @@ print(response.json()[:5])  # show first 5 predictions
 ### 📈 Results
 
 + **ROC-AUC ≈ 0.97**
-+ ** PR-AUC ≈ 0.87**
++ **PR-AUC ≈ 0.87**
 
 Balanced precision and recall on fraud cases
 
