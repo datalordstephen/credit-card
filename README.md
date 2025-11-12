@@ -32,7 +32,8 @@ credit-card/
 ├── tests/
 │   ├── test_data_format.py     # test data format
 │   └── test_api.py             # test api responses
-├── requirements.txt        
+├── pyproject.toml       
+├── uv.lock                     # virtual environment     
 └── README.md
 ```
 
@@ -64,21 +65,17 @@ cd credit-card
 
 ### 2. Create environment & install dependencies:
 
-* ### Mac/Linux
-
+* Install UV (fast package manager)
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+pip install uv
 ```
 
-* ### Windows
-
+* Create environment and install requirements
 ```bash
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+uv init
+uv sync
 ```
+
 
 ## Training (Optional)
 If you'd like to train the model before using it: 
@@ -89,47 +86,46 @@ If you'd like to train the model before using it:
 
 ### Train the model
 ```bash
-python src/train.py
+uv run python src/train.py
 ```
 
 ### Evaluate the model
 ```bash
-python src/evaluate.py
+uv run python src/evaluate.py
 ```
 
 ## ▶️ Usage
+### Option 1: Locally with UV
 To start up the API:
 
 ```bash
-uvicorn api.app:app --reload
+uv run uvicorn api.app:app --reload
+```
+### Option 2: Run with Docker 🐳
+Docker provides a containerized environment that ensures consistency across different systems. To get started with it:
+
+### **Build the Docker Image**
+```bash
+docker build -t credit-card-fraud-api .
+```
+
+### **Run the container:**
+```bash
+docker run -p 8000:8000 credit-card-fraud-api
+```
+
+#### The API will be accessible at http://localhost:8000
+
+#### **Stop the container (after inference) and view logs**
+```bash
+docker stop fraud-api
+docker logs fraud-api
 ```
 
 ### 📡 Example API Requests (Python)
 * ### Single Prediction:
-```python
-import requests
-
-# local url or hosted model
-url = "http://127.0.0.1:8000/predict" | "https://cc-fraud-service.onrender.com/predict"
-
-sample_txn = {
-  "V1": -16.5265065691231, "V2": 8.58497179585822, "V3": -18.6498531851945,
-  "V4": 9.50559351508723, "V5": -13.7938185270957, "V6": -2.83240429939747,
-  "V7": -16.701694296045, "V8": 7.51734390370987, "V9": -8.50705863675898,
-  "V10": -14.1101844415457, "V11": 5.29923634963938, "V12": -10.8340064814734,
-  "V13": 1.67112025332681, "V14": -9.37385858364976, "V15": 0.360805641631617,
-  "V16": -9.89924654080666, "V17": -19.2362923697613, "V18": -8.39855199494575,
-  "V19": 3.10173536885404, "V20": -1.51492343527852, "V21": 1.19073869481428,
-  "V22": -1.12767000902061, "V23": -2.3585787697881, "V24": 0.673461328987237,
-  "V25": -1.4136996745882, "V26": -0.46276236139933, "V27": -2.01857524875161,
-  "V28": -1.04280416970881, "log_amount": 5.900417766089615, "hour_of_day": 11,
-  "time_of_day": 0
-}
-
-
-response = requests.post(url, json=sample_txn)
-print(response.json())
-
+```bash
+python predict.py
 ```
 
 * ### Batch Prediction:
