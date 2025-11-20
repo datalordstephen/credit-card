@@ -50,10 +50,6 @@ def train_and_save_model(model_path=cfg.MODEL_PATH, api_test_path=cfg.TEST_DATA_
     # Load preprocessed train/test split
     X_train, y_train, X_test, y_test, api_data = load_and_split()
     logger.info("Data loaded and split.")
-    
-    # Save API holdout data
-    api_data.to_csv(api_test_path, index=False)
-    logger.info(f"API test data saved to {api_test_path}")
 
     # Handle imbalance
     scale_pos_weight = (y_train == 0).sum() / (y_train == 1).sum()

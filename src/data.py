@@ -4,6 +4,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import config as cfg
 import warnings
+import os
 warnings.filterwarnings("ignore")
 
 def load_data():
@@ -87,13 +88,16 @@ def load_and_split(test_size: float = cfg.TEST_SIZE,
     # 80% fulltrain (train + val), 20% test
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state, stratify=y)
 
-    # Hold out API test data (15 samples from the test set)
-    api_data = X_test.iloc[:api_holdout].copy()
-    api_labels = y_test.iloc[:api_holdout].copy()
-    api_data["Class"] = api_labels
+    # Hold out API test data if it doesn't exist, else read it
+    if not os.path.exists(cfg.TEST_DATA_PATH):
+        api_data = X_test.sample(n=api_holdout)
+        api_labels = y_test.loc[api_data.index].copy()
+        api_data["Class"] = api_labels
 
-    X_test = X_test.iloc[api_holdout:].copy()
-    y_test = y_test.iloc[api_holdout:].copy()
+        X_test = X_test.drop(api_data.index)
+        y_test = y_test.drop(api_data.index)
+    else:
+        api_data = pd.read_csv(cfg.TEST_DATA_PATH)
 
     return X_train, y_train, X_test, y_test, api_data
 
