@@ -68,4 +68,4 @@ def predict_batch(file_path: str, model_path=MODEL_PATH):
     df["fraud_probability"] = probs
     df["fraud_prediction"] = preds
 
-    return df
+    return df.to_dict(orient="records")

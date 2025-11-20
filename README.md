@@ -47,13 +47,14 @@ credit-card/
 ├── api/
 │   └── app.py              # FastAPI app
 ├── data/
-│   ├── creditcard.csv      # Raw dataset (too large to upload, download and insert)
-│   └── api_test.csv        # Holdout processed data for API testing
+│   ├── api_test.csv        # Holdout data to test API
+│   └── creditcard.csv      # Raw dataset (too large to upload, download and insert)
+├── imgs/                   # imgs used in README
 ├── models/
 │   ├── best_xgb_model.pkl  # Trained XGBoost model
 │   └── metadata.json       # Model metadata
 ├── notebooks/
-│   ├── playground.ipynb       # feat engineering + baseline + hyperparam tuning
+│   ├── notebook.ipynb       # feat engineering + baseline + hyperparam tuning
 ├── reports/
 │   ├── metrics.json          # Evaluation metrics
 │   ├── confusion_matrix.png  # Plots from evaluation
@@ -62,16 +63,21 @@ credit-card/
 ├── src/
 │   ├── config.py              # store configs
 │   ├── data.py                # funcs to load and preprocess data
-│   ├── evaluate.py            # extract model metrics + plots
 │   ├── logger.py              # logger config
 │   ├── predict.py             # funcs for single and batch predictions
-│   └── train.py               # training code for xgb model
+│   └── train.py               # training + evaluation
 ├── tests/
 │   ├── test_data_format.py     # test data format
 │   └── test_api.py             # test api responses
+├── .gitignore      
+├── .python-version     
+├── Dockerfile      
+├── Procfile       
 ├── pyproject.toml       
-├── uv.lock                     # virtual environment     
-└── README.md
+├── README.md       
+├── requirements.txt       
+├── test.py  
+└── uv.lock                     # virtual environment 
 ```
 # Exploratory Data Analysis
 The next step taken was to perform basic exploratory data analysis to check for missing values, view target distribution and perform feature engineering and here are some of the results:
@@ -85,11 +91,19 @@ The next step taken was to perform basic exploratory data analysis to check for 
 - Engineered a few features from the `time` column: *hour_of_day* which contains values from 0 to 23 and *time_of_day* which divides hours into 4 bins (morning, noon, evening, night)
 
 # Modelling
-I trained, evaluated and tuned **three** models namely: a `LogisticRegression` model, a `RandomForest` Classifier and an `XGBoost` Classifier
+I trained, evaluated and tuned **three** models namely: a `LogisticRegression` model, a `RandomForest` Classifier and an `XGBoost` Classifier with *XGBoost* leading the pack.
 
+![trained models](imgs/model_pr_auc_comparison.png)
 
+Here's a summary of results gotten from each tuned model:
 
-#plot/table showing tuned metrics of the three models
+| Model | ROC-AUC | PR-AUC | Precision | Recall | Best Parameters
+|-----------|---------|-----------|---------|-----------|---------|
+| LogReg | 0.9679| 0.725 | 0.85 |0.5152 |`solver: lbfgs, penalty: l2, max_iter: 500, class_weight: None, C: 0.1`|
+| Random Forest | 0.9591 | 0.8057 | 0.8765 | 0.7172 | `n_estimators: 200, min_samples_split: 2, min_samples_leaf: 4, max_depth: 20, class_weight: balanced`|
+| **XGBoost** | **0.9717** | **0.8122** | **0.828** | **0.7778** | **`subsample: 0.6, n_estimators: 300, min_child_weight: 1, max_depth: 5, learning_rate: 0.05, gamma: 2, colsample_bytree: 1.0`** |
+
+I selected the **XGBoost** model as it performed the best.
 
 
 # Deployment/Containerization
@@ -160,10 +174,10 @@ print(response.json()[:5])  # show first 5 predictions
 
 ```
 
-## Results
-
-+ **ROC-AUC ≈ 0.97**
-+ **PR-AUC ≈ 0.87**
+## Results (Test Set)
+The tuned XGBoost model was able to achieve these scores on the test set:
++ **ROC-AUC ≈ 0.985**
++ **PR-AUC ≈ 0.877**
 
 Balanced precision and recall on fraud cases
 
@@ -175,14 +189,9 @@ If you'd like to train the model before using it:
 * Download the [Credit Card Fraud Detection](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud/data) on kaggle
 * Insert the unzipped file (rename to `creditcard.csv` if it's not named that) into the `data` folder of the project
 
-### Train the model
+### Train and Evaluate the model
 ```bash
 uv run python src/train.py
-```
-
-### Evaluate the model
-```bash
-uv run python src/evaluate.py
 ```
 
 ## Features

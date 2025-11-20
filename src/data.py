@@ -58,9 +58,11 @@ def preprocess_data(df: pd.DataFrame):
 
     return df
 
-def load_and_split(test_size: float = cfg.TEST_SIZE, api_holdout: int = cfg.API_HOLDOUT, random_state: int = cfg.RANDOM_STATE):
+def load_and_split(test_size: float = cfg.TEST_SIZE,
+                   api_holdout: int = cfg.API_HOLDOUT, 
+                   random_state: int = cfg.RANDOM_STATE):
     """
-    Load, preprocess, and split the dataset into train/test sets.
+    Load, preprocess, and split the dataset into full-train & test sets.
     Also hold out a few rows completely for API testing.
 
     Args:
@@ -78,18 +80,20 @@ def load_and_split(test_size: float = cfg.TEST_SIZE, api_holdout: int = cfg.API_
     df = load_data()
     df = preprocess_data(df)
 
-    # Hold out API test data
-    api_data = df.sample(n=api_holdout, random_state=random_state)
-    df = df.drop(api_data.index)
-
     # Features and labels
     X = df.drop("Class", axis=1)
     y = df["Class"]
 
-    # Stratified split to preserve fraud ratio
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=test_size, stratify=y, random_state=random_state
-    )
+    # 80% fulltrain (train + val), 20% test
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state, stratify=y)
 
-    return X_train, X_test, y_train, y_test, api_data
+    # Hold out API test data (15 samples from the test set)
+    api_data = X_test.iloc[:api_holdout].copy()
+    api_labels = y_test.iloc[:api_holdout].copy()
+    api_data["Class"] = api_labels
+
+    X_test = X_test.iloc[api_holdout:].copy()
+    y_test = y_test.iloc[api_holdout:].copy()
+
+    return X_train, y_train, X_test, y_test, api_data
 

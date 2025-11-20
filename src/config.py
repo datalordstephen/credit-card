@@ -17,14 +17,14 @@ API_HOLDOUT = 15
 
 # XGBoost best hyperparameters (from RandomizedSearchCV in my notebook)
 XGB_PARAMS = {
-    "subsample": 0.8,
-    "n_estimators": 200,
-    "max_depth": 7,
-    "learning_rate": 0.1,
-    "gamma": 1,
-    "colsample_bytree": 1.0,
+    'subsample': 0.6,
+    'n_estimators': 300,
+    'min_child_weight': 1,
+    'max_depth': 5,
+    'learning_rate': 0.05,
+    'gamma': 2,
+    'colsample_bytree': 1.0,
     "eval_metric": "aucpr",
-    "use_label_encoder": False,
     "n_jobs": -1,
     "random_state": RANDOM_STATE
 }
