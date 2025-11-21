@@ -161,18 +161,29 @@ docker stop fraud-api
 python test.py
 ```
 
+![single-test](imgs/single-test.png)
+> local test
+
+
+
 ## Batch Prediction:
 ```python
 import requests
 
 # localhost or hostel model
-url = "http://127.0.0.1:8000/predict-batch" | "https://cc-fraud-service.onrender.com/predict-batch"
+url = "http://127.0.0.1:8000/predict-batch"
 files = {"file": open("data/api_test.csv", "rb")}
 
 response = requests.post(url, files=files)
 print(response.json()[:5])  # show first 5 predictions
-
 ```
+
+# Cloud Deployment
+I deployed the API using Render and it's live at: https://cc-fraud-service.onrender.com/predict-batch 
+
+![postman](imgs/postman.webp)
+> testing cloud deployment
+
 
 ## Results (Test Set)
 The tuned XGBoost model was able to achieve these scores on the test set:
