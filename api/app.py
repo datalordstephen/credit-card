@@ -73,6 +73,14 @@ def home():
         }
     }
 
+@app.get("/health")
+def health_chech():
+    """
+    Health check endpoint.
+    """
+    logger.info("Health check endpoint accessed.")
+    return {"status": "ok"}
+
 
 @app.post("/predict")
 def predict(transaction: Transaction):
