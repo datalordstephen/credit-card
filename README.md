@@ -179,8 +179,7 @@ print(response.json()[:5])  # show first 5 predictions
 ```
 
 # Cloud Deployment
-I deployed the API using Render and it's live at: https://cc-fraud-service.onrender.com/predict-batch 
-
+I deployed the API using Railway and it's live at: https://credit-card-production.up.railway.app/
 ![postman](imgs/postman.webp)
 > testing cloud deployment
 
@@ -216,6 +215,7 @@ uv run python src/train.py
     * Metrics: ROC-AUC, PR-AUC, classification report
     * Fraud vs non-fraud probability distribution plots
 * API
+    * `/health` → confirm API is live
     * `/predict` → single transaction fraud probability
     * `/predict-batch` → batch predictions from CSV
 * Testing
