@@ -101,5 +101,5 @@ async def predict_batch_file(file: UploadFile = File(...)):
         tmp.write(file.file.read())
         tmp_path = tmp.name
 
-    df = predict_batch(tmp_path, model_path=MODEL_PATH)
-    return df.to_dict(orient="records")
+    results = predict_batch(tmp_path, model_path=MODEL_PATH)
+    return results
