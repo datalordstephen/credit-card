@@ -28,4 +28,4 @@ jobs:
 
     - name: Run tests
       run: |
-        uv run pytest -q tests/test_data_format.py
+        PYTHONPATH=. uv run pytest -q tests/test_data_format.py
