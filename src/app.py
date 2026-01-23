@@ -3,9 +3,9 @@ from pydantic import BaseModel
 import joblib
 import json
 import tempfile
-from src.predict import predict_single, predict_batch
-from src.config import MODEL_PATH, METADATA_PATH
-from src.logger import get_logger
+from .predict import predict_single, predict_batch
+from .config import MODEL_PATH, METADATA_PATH
+from .logger import get_logger
 
 # Initialize logger
 logger = get_logger(__name__)

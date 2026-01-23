@@ -44,8 +44,6 @@ This project uses the **Credit Card Fraud Detection** dataset from Kaggle, origi
 # Project Structure
 ```graphql
 credit-card/
-├── api/
-│   └── app.py              # FastAPI app
 ├── data/
 │   ├── api_test.csv        # Holdout data to test API
 │   └── creditcard.csv      # Raw dataset (too large to upload, download and insert)
@@ -53,14 +51,13 @@ credit-card/
 ├── models/
 │   ├── best_xgb_model.pkl  # Trained XGBoost model
 │   └── metadata.json       # Model metadata
-├── notebooks/
-│   ├── notebook.ipynb       # feat engineering + baseline + hyperparam tuning
 ├── reports/
 │   ├── metrics.json          # Evaluation metrics
 │   ├── confusion_matrix.png  # Plots from evaluation
 │   ├── pr_curve.png          # Plots from evaluation
 │   └── roc_curve.png        # Plots from evaluation
 ├── src/
+│   ├── app.py                 # FastAPI app
 │   ├── config.py              # store configs
 │   ├── data.py                # funcs to load and preprocess data
 │   ├── logger.py              # logger config
@@ -72,12 +69,13 @@ credit-card/
 ├── .gitignore      
 ├── .python-version     
 ├── Dockerfile      
+├── notebook.ipynb              
 ├── Procfile       
 ├── pyproject.toml       
 ├── README.md       
 ├── requirements.txt       
 ├── test.py  
-└── uv.lock                     # virtual environment 
+└── uv.lock                     
 ```
 # Exploratory Data Analysis
 The next step taken was to perform basic exploratory data analysis to check for missing values, view target distribution and perform feature engineering and here are some of the results:
@@ -123,16 +121,15 @@ cd credit-card
 pip install uv
 ```
 
-* Create environment and install requirements
+* Install requirements
 ```bash
-uv init
 uv sync
 ```
 
 ### 2 Start up API
 
 ```bash
-uv run uvicorn api.app:app --reload
+uv run uvicorn src.app:app --reload
 ```
 
 ## With Docker 🐳

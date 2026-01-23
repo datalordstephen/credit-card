@@ -2,7 +2,7 @@
 FROM python:3.11.9-slim
 
 # Install uv
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/
 
 # Set working directory
 WORKDIR /code
@@ -17,9 +17,7 @@ COPY pyproject.toml uv.lock .python-version ./
 RUN uv sync --frozen --no-dev
 
 # Copy application code
-# COPY "api/" "models/" "src" ./
 
-COPY api/ ./api/
 COPY models/ ./models/
 COPY src/ ./src/
 
@@ -27,4 +25,4 @@ COPY src/ ./src/
 EXPOSE 8000
 
 # Run your application
-ENTRYPOINT ["uvicorn", "api.app:app", "--host", "0.0.0.0", "--port", "8000"]
+ENTRYPOINT ["uvicorn", "src.app:app", "--host", "0.0.0.0", "--port", "8000"]
